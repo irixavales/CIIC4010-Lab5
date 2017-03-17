@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 public class MyMouseAdapter extends MouseAdapter {
 
 	private Color existingColor;
-	private Color[] existingColorArray = new Color[Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS)];
+	private Color[] existingColorArray = new Color[Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS - 1)];
 
 	private Random generator = new Random();
 	public void mousePressed(MouseEvent e) {
@@ -85,7 +85,7 @@ public class MyMouseAdapter extends MouseAdapter {
 							//On the top-left cell
 
 							Color newColor = null;
-							for (int i = 0; i < 9/*(Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS))*/; i++) {
+							for (int i = 0; i < (Math.max(MyPanel.TOTAL_COLUMNS - 1, MyPanel.TOTAL_ROWS - 2)) - 1; i++) {
 								do {
 									switch (generator.nextInt(5)) 
 									{
@@ -188,7 +188,7 @@ public class MyMouseAdapter extends MouseAdapter {
 							//On the top row
 
 							Color newColor = null;
-							for (int i = 1; i < MyPanel.TOTAL_ROWS; i++) {
+							for (int i = 1; i < MyPanel.TOTAL_ROWS - 1; i++) {
 								do {
 									switch (generator.nextInt(5)) 
 									{
@@ -247,8 +247,9 @@ public class MyMouseAdapter extends MouseAdapter {
 					}
 				}
 				myPanel.repaint();
-				break;
 			}
+				break;
+			
 			
 		case 3:		//Right mouse button
 			
@@ -261,21 +262,34 @@ public class MyMouseAdapter extends MouseAdapter {
 			}
 			myFrame = (JFrame)c;
 			myPanel = (MyPanel) myFrame.getContentPane().getComponent(0);  //Can also loop among components to find MyPanel
-			for (int i=1; i < MyPanel.TOTAL_COLUMNS; i++) {
-				for (int j=1; j < MyPanel.TOTAL_ROWS; j++) {
-					if(!MyPanel.colorArray[i][j].equals(Color.WHITE)) {
-						float r = generator.nextFloat();
-						float g = generator.nextFloat();
-						float b = generator.nextFloat();
-						Color newColor = new Color(r, g, b);
-						MyPanel.colorArray[i][j] = newColor;
-						myPanel.repaint();
+			myInsets = myFrame.getInsets();
+			x1 = myInsets.left;
+			y1 = myInsets.top;
+			e.translatePoint(-x1, -y1);
+			x = e.getX();
+			y = e.getY();
+			myPanel.x = x;
+			myPanel.y = y;
+			gridX = myPanel.getGridX(x, y);
+			gridY = myPanel.getGridY(x, y);
+			if (gridX == -1 || gridY == -1) {
+
+				for (int i=1; i < MyPanel.TOTAL_COLUMNS; i++) {
+					for (int j=1; j < MyPanel.TOTAL_ROWS; j++) {
+						if(!MyPanel.colorArray[i][j].equals(Color.WHITE)) {
+							float r = generator.nextFloat();
+							float g = generator.nextFloat();
+							float b = generator.nextFloat();
+							Color newColor = new Color(r, g, b);
+							MyPanel.colorArray[i][j] = newColor;
+							myPanel.repaint();
+						}
 					}
 				}
+
+				break;
 			}
-			
-			break;
-			
+
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
 			break;
