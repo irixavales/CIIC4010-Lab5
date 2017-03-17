@@ -8,6 +8,9 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 public class MyMouseAdapter extends MouseAdapter {
+	private Color existingColor;
+	private Color[] existingColorArray;
+	
 	private int existingCaseNum;
 	private int[] existingCaseNumbers = new int[Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS)];
 	private int[][] existingCaseNumbers2 = new int[3][3];
@@ -153,37 +156,56 @@ public class MyMouseAdapter extends MouseAdapter {
 						}
 						
 						else if (gridX == 0) {
+							
 							//On the left column
+							Color newColor = null;
 							for (int i = 1; i < MyPanel.TOTAL_COLUMNS; i++) {
-								Color newColor = null;
-								int caseNum = generator.nextInt(5);
-								if (!myPanel.colorArray[i][gridY].equals(Color.WHITE)) {
-									while (caseNum == existingCaseNumbers[i-1]) {
-										caseNum = generator.nextInt(5);
+								if (!myPanel.colorArray[gridX][gridY].equals(Color.WHITE)) {
+									do {
+										switch (generator.nextInt(5)) 
+										{
+										case 0:
+											newColor = Color.YELLOW;
+											break;
+										case 1:
+											newColor = Color.MAGENTA;
+											break;
+										case 2:
+											newColor = Color.BLACK;
+											break;
+										case 3:
+											newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
+											break;
+										case 4:
+											newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
+											break;
+										}
+									} while (newColorArray.equals(existingColorArray[i]));
+								}
+								else {
+									switch (generator.nextInt(5)) 
+									{
+									case 0:
+										newColor = Color.YELLOW;
+										break;
+									case 1:
+										newColor = Color.MAGENTA;
+										break;
+									case 2:
+										newColor = Color.BLACK;
+										break;
+									case 3:
+										newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
+										break;
+									case 4:
+										newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
+										break;
 									}
 								}
-								switch (caseNum) 
-								{
-								case 0:
-									newColor = Color.YELLOW;
-									break;
-								case 1:
-									newColor = Color.MAGENTA;
-									break;
-								case 2:
-									newColor = Color.BLACK;
-									break;
-								case 3:
-									newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
-									break;
-								case 4:
-									newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
-									break;
-								}
-								existingCaseNumbers[i-1] = caseNum;
-								myPanel.colorArray[i][gridY] = newColor;
-							}
-							myPanel.repaint();
+								existingColorArray[i] = newColor;
+								myPanel.colorArray[gridX][gridY] = newColor;
+								myPanel.repaint();
+						}
 						}
 						
 						else if (gridY == 0) {
@@ -222,14 +244,31 @@ public class MyMouseAdapter extends MouseAdapter {
 						
 						else {
 							//On the grid other than on the left column and on the top row:
-							Color newColor = null;
-							int caseNum = generator.nextInt(5);
-							if (!myPanel.colorArray[gridX][gridY].equals(Color.WHITE)) {
-								while (caseNum == existingCaseNum) {
-									caseNum = generator.nextInt(5);
+						Color newColor = null;
+						if (!myPanel.colorArray[gridX][gridY].equals(Color.WHITE)) {
+							do {
+								switch (generator.nextInt(5)) 
+								{
+								case 0:
+									newColor = Color.YELLOW;
+									break;
+								case 1:
+									newColor = Color.MAGENTA;
+									break;
+								case 2:
+									newColor = Color.BLACK;
+									break;
+								case 3:
+									newColor = new Color(0x964B00);   //Brown (from http://simple.wikipedia.org/wiki/List_of_colors)
+									break;
+								case 4:
+									newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
+									break;
 								}
-							}
-							switch (caseNum) 
+							} while (newColor.equals(existingColor));
+						}
+						else {
+							switch (generator.nextInt(5)) 
 							{
 							case 0:
 								newColor = Color.YELLOW;
@@ -247,10 +286,10 @@ public class MyMouseAdapter extends MouseAdapter {
 								newColor = new Color(0xB57EDC);   //Lavender (from http://simple.wikipedia.org/wiki/List_of_colors)
 								break;
 							}
-							existingCaseNum = caseNum;
-							myPanel.colorArray[gridX][gridY] = newColor;
-							myPanel.repaint();
 						}
+						existingColor = newColor;
+						myPanel.colorArray[gridX][gridY] = newColor;
+						myPanel.repaint();
 					}
 				}
 			}
