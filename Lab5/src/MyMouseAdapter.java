@@ -85,7 +85,7 @@ public class MyMouseAdapter extends MouseAdapter {
 							//On the top-left cell
 
 							Color newColor = null;
-							for (int i = 1; i < Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS); i++) {
+							for (int i = 0; i < 9/*(Math.max(MyPanel.TOTAL_COLUMNS, MyPanel.TOTAL_ROWS))*/; i++) {
 								do {
 									switch (generator.nextInt(5)) 
 									{
@@ -107,7 +107,7 @@ public class MyMouseAdapter extends MouseAdapter {
 									}
 								} while (newColor.equals(existingColorArray[i]));
 								existingColorArray[i] = newColor;
-								myPanel.colorArray[i][i] = newColor;
+								MyPanel.colorArray[i+1][i+1] = newColor;
 								myPanel.repaint();
 							}
 						}
